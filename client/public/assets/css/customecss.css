@@ -1,0 +1,17 @@
+/* styles.css */
+.input-custom {
+    margin-top: 0px;
+    width: 100%;
+    border-bottom: 3px solid white; /* Solid white bottom border */
+    background-color: transparent; /* Transparent background */
+    color: white; /* Text color */
+    outline: none; /* Remove the outline when input is clicked */
+    border-left: none; /* Remove left border */
+    border-top: none; /* Remove top border */
+    border-right: none; /* Remove right border */
+}
+
+
+.input-custom::placeholder {
+    color: white; /* Placeholder text color */
+  }

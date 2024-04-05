@@ -1,0 +1,32 @@
+{
+  "name": "ecom_project",
+  "version": "1.0.0",
+  "description": "simple_ecom_project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "e-commerce",
+    "shopping",
+    "online",
+    "store",
+    "digital",
+    "products",
+    "payment",
+    "checkout"
+  ],
+  "author": "user",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.3",
+    "mongoose": "^8.2.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
