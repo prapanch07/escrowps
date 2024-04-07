@@ -340,7 +340,7 @@ Header Style
 */
 
 .background-header {
-  background-color: #fff !important;
+  background-color: #350808c5 !important;
   height: 70px!important;
   position: fixed!important;
   top: 0!important;
@@ -371,9 +371,14 @@ Header Style
   min-height: 80px;
   background: transparent;
   display: flex;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.137);
   padding: 15px 30px;
-  border-radius: 50px;
+  border-radius: 20px;
+
+
+  /* main-nav */
+
+  /* style={{  backgroundColor: 'rgba(255, 255, 255, 0.4)', borderRadius:'20px'  }} */
 }
 
 .background-header .main-nav {
@@ -428,7 +433,7 @@ Header Style
   font-weight: 500;
   font-size: 14px;
   text-transform: capitalize;
-  color: #2a2a2a;
+  color: #ffffff;
   -webkit-transition: all 0.3s ease 0s;
   -moz-transition: all 0.3s ease 0s;
   -o-transition: all 0.3s ease 0s;
@@ -446,13 +451,15 @@ Header Style
 
 .header-area .main-nav .nav li:hover a,
 .header-area .main-nav .nav li a.active {
-  color: #fff;
-  background-color: #7453fc;
+  color: #ffffff;
+  background-color: #33266683;
+  border-radius: 0px;
+  font-size: 15px;
 }
 
 .background-header .main-nav .nav li:hover a,
 .background-header .main-nav .nav li a.active {
-  color: #fff;
+  color: #ffffff;
   opacity: 1;
 }
 
@@ -759,7 +766,7 @@ Banner Style
 .main-banner .buttons {
   margin-top: 30px;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
 }
 
 .main-banner .border-button {

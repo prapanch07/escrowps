@@ -15,3 +15,11 @@
 .input-custom::placeholder {
     color: white; /* Placeholder text color */
   }
+
+.custom-drop-item {
+    border-radius: 0px!important;
+    background-color: transparent!important; 
+    color: black!important; 
+    font-size: medium!important;
+    font-weight: bold;
+}

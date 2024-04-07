@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import BaseLayout from './BaseLayout';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -26,6 +28,7 @@ const RegisterPage = () => {
         try {
             const response = await axios.post('http://localhost:5000/api/user/register', formData);
             console.log('Register successful:', response.data);
+            navigate('/');
         } catch (error) {
             if (error.response && error.response.status === 400) {
                 setError(error.response.data.message); // Set the error message sent from the server
@@ -37,8 +40,8 @@ const RegisterPage = () => {
 
     return (
         <BaseLayout>
-            <div className="container-fluid" style={{ paddingBottom: '1em', paddingTop: '10em', border: 'solid', minHeight: '610px', backgroundImage: `url(${require('../assets/images/banner-bg.jpg')})`, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <div className="container-fluid text-white" style={{ backgroundColor: 'rgba(255, 255, 255, 0.3)', padding: '4em', paddingTop: '1em', paddingBottom: '2em', width: '40em' }}>
+            
+            <div className="container-fluid text-white" style={{ backgroundColor: 'rgba(255, 255, 255, 0.3)',  padding:'4em', paddingTop : '1em', paddingBottom : '0em', width:'40em', height:'32em', marginTop:'2em',marginBottom: '2em' }}>
                     <h2>Register</h2>
                     <form onSubmit={handleSubmit}>
                         <div className="" style={{ marginTop: '1em' }}>
@@ -96,7 +99,7 @@ const RegisterPage = () => {
                     {error && <div className="error">{error}</div>}
                     <p style={{ fontSize: 'large', marginTop: '1em' }}>Already have an account? <a href="/login" style={{ textDecoration: 'underline', color: 'white' }}>Login here</a></p>
                 </div>
-            </div>
+            
         </BaseLayout>
     );
 };

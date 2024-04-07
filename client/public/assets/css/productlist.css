@@ -1,0 +1,51 @@
+.product_card{
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 15em;
+    margin-bottom: 20px;
+}
+
+.pro-card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+    align-items: center;
+    background-color: rgba(235, 219, 219, 0.521);
+    font-family: 'Caveat Brush', cursive;
+    min-height: 14em;
+    position: relative; /* Add positioning for absolute positioning of price */
+}
+
+.owner {
+    position: absolute;
+    font-size: medium;
+    font-weight: bold;
+    bottom: 0; 
+    right: 0;
+    right: 0;
+    padding: 10px; 
+    /* padding-left: 1em; */
+    background-color: rgba(83, 66, 66, 0.233); 
+    color: rgb(0, 0, 0);
+}
+
+.search_box_div{
+    background-color: rgba(0, 255, 255, 0);
+    border: solid 1px white;
+    border-radius: 20px;
+}
+
+.search_box {
+    background: none;
+    border: 0px;
+    outline: none;
+    color: wheat;
+    font-size: large;
+}
+
+.search_button {
+    border-radius: 20px;
+    background-color: rgb(40, 40, 71);
+}
+

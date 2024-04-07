@@ -11,6 +11,15 @@ const userSchema = new mongoose.Schema({
     },
     fullname:{
         type: String, required:true
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false 
+    },
+    isSeller: {
+        type: Boolean,
+        default: false 
+    
     }
 });
 

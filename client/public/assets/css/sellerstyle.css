@@ -1,0 +1,36 @@
+.seller-container {
+    min-height: 350px;
+    padding: 2em;
+}
+
+
+
+
+.seller-navbar {
+    height: 5em;
+    color: rgb(238, 214, 214);
+}
+
+.seller-navbar .navbar-brand,
+.seller-navbar .nav-link {
+    color: white !important; /* Override Bootstrap's default colors */
+}
+
+.seller-navbar .navbar-brand {
+    font-size: x-large;
+    font-weight: bold;
+    margin-left: 3em;
+}
+
+.custom-file-input {
+    color: white; 
+    background-color: #007bff; 
+    border: 1px solid #007bff; 
+    padding: 8px 12px; 
+    border-radius: 5px; 
+    cursor: pointer; 
+}
+
+.custom-file-label {
+    margin-top: 5px; 
+}

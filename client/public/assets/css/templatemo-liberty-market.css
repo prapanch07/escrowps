@@ -152,7 +152,7 @@ body {
 .border-button a:after {
   width: 78%;
   height: 2px;
-  background-color: #fff;
+  background-color: #ffffff;
   content: '';
   position: absolute;
   left: 50%;
@@ -351,6 +351,7 @@ Header Style
   -moz-transition: all .5s ease 0s;
   -o-transition: all .5s ease 0s;
   transition: all .5s ease 0s;
+  border: solid;
 }
 
 .header-area {
@@ -371,7 +372,7 @@ Header Style
   min-height: 80px;
   background: transparent;
   display: flex;
-  background-color: #fff;
+  background-color: #ffffff;
   padding: 15px 30px;
   border-radius: 50px;
 }
@@ -447,7 +448,7 @@ Header Style
 .header-area .main-nav .nav li:hover a,
 .header-area .main-nav .nav li a.active {
   color: #fff;
-  background-color: #7453fc;
+  background-color: #7553fc;
 }
 
 .background-header .main-nav .nav li:hover a,

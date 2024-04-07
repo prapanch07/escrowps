@@ -9,23 +9,37 @@ const AddProduct = () => {
     const [category, setCategory] = useState('');
     const [brand, setBrand] = useState('');
     const [quantityLeft, setQuantityLeft] = useState('');
-    const [image, setImage] = useState('');
+    const [image, setImage] = useState(null);
     const navigate = useNavigate();
 
+    const handleImageUpload  = (e) => {
+        const file = e.target.files[0];
+        setImage(file)
+    };
+ 
     const handleAddProduct = async (e) => {
         e.preventDefault();
-        const newProduct = {
-            name,
-            description,
-            price: parseFloat(price),
-            category,
-            brand,
-            quantity_left: parseInt(quantityLeft),
-            image
-        };
+
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('description', description);
+        formData.append('price', parseFloat(price));
+        formData.append('category', category);
+        formData.append('brand', brand);
+        formData.append('quantity_left', parseInt(quantityLeft));
+        formData.append('image', image);
+
+        for (var pair of formData.entries()) {
+            console.log(pair[0]+ ', ' + pair[1]); 
+        }
+        console.log('FormData:', formData);
 
         try {
-            const response = await axios.post('http://localhost:5000/api/products', newProduct);
+            const response = await axios.post('http://localhost:5000/api/products', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
             console.log('Product added:', response.data);
             // After adding the product, navigate to the product list page
             navigate('/products');
@@ -51,7 +65,7 @@ const AddProduct = () => {
                 <label>Quantity Left:</label>
                 <input type="number" value={quantityLeft} onChange={(e) => setQuantityLeft(e.target.value)} required />
                 <label>Image:</label>
-                <input type="text" value={image} onChange={(e) => setImage(e.target.value)} required />
+                <input type="file" onChange={handleImageUpload} required />
                 <button type="submit">Add Product</button>
             </form>
         </div>

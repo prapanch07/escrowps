@@ -1,15 +1,37 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-
+const multer = require('multer'); 
+const path = require('path');
 const app = express();
+
+const staticFolderPath = path.join(__dirname, 'uploads');
+console.log('Static folder path:', staticFolderPath);
+app.use(express.static(staticFolderPath));
+
 const productRoutes = require('./routes/products');
 const userRoutes = require('./routes/users')
+
 // Middleware
 app.use(cors());
-app.use(express.json()); // Parse JSON request bodies
+app.use(express.json());
 
-app.use('/api/products', productRoutes);
+
+
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, 'uploads/'); 
+    },
+    filename: function(req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname); 
+    }
+});
+
+const upload = multer({ storage: storage });
+
+
+// app.use('/api/products', productRoutes);
+app.use('/api/products', upload.single('image'), productRoutes);
 app.use('/api/user', userRoutes);
 
 // Define routes

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from 'axios' ;
+import BaseLayout  from './BaseLayout';
+import { BACKEND_URL } from '../App';
 
 
 const ProductDetails = () => {
@@ -15,7 +17,7 @@ const ProductDetails = () => {
                 // const response = await axios.get('http://localhost:5000/api/products/${productId}');
                 const response = await axios.get(`http://localhost:5000/api/products/${productId}`);
                 setProduct(response.data);
-                console.log("Fetched Products:", response.data);
+                // console.log("Fetched Products:", response.data);
             } catch (error) {
                 
                 console.error("Error Fetching Products:", error);
@@ -35,17 +37,43 @@ const ProductDetails = () => {
         return <p>Loading...</p>;
     }
     return (
-        <div>
-            <h1>Product Details</h1>
+        <BaseLayout>
+        <div className="container-fluid det_container">
+            <div className="container" style={{padding : '1em'}}>
+                <div className="row mt-5">
+                    <div className="col-md-6 mb-0" >
+                        <h1>{product.name}</h1>
+                        <p>patent to {product.ownerName}</p>
+                        <p>Seller: {product.seller.fullname}</p>
+                        <p className="pt-4" style={{minHeight:'150px'}}>{product.description}</p>
+
+                        <h3 className="pt-4 ">Price: {product.price}</h3>
+                        <div className="row">
+                            <div className="ml-auto mt-4">
+                                <a className="btn btn-outline-success det_button">Bid now</a>
+                            </div>
+                            <div className="ml-auto mt-4 mr-auto">
+                            <a className="btn btn-outline-primary  det_button">Chat</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md-6" style={{backgroundColor:'white'}}>
+                        <img src={`${BACKEND_URL}/${product.image}`} alt={product.name} className="card-img-top" style={{ width:'100%' }} />
+                    </div>
+                    
+                </div>
+            {/* <button onClick={handleAddProduct}>Add Product</button> */}
             
-            <button onClick={handleAddProduct}>Add Product</button>
-            <div className="container" style={{padding : '5em'}}>
-                <h2 style={{ color: 'black' }}>{product.name}</h2>
-                <p  style={{ color: 'black' }}>{product.description}</p>
-                <p style={{ color: 'black' }}>Price: {product.price}</p>
+                
+                
+                
             </div>
-            <img src={product.image} alt={product.name} className="card-img-top" style={{ width: '20%'}} /> {/* Image */}
+            
         </div>
+        </BaseLayout>
+
+
+        
     );
 };
 

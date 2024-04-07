@@ -1,0 +1,30 @@
+.det_container{
+    background-color: rgba(245, 245, 220, 0.811);
+    margin: 1em;
+    margin-top: 0;
+    font-family: 'Caveat Brush', cursive;
+    color: black!important;
+    min-height: 550px;
+}
+
+.det_container h1,
+.det_container h2,
+.det_container h3,
+.det_container p {
+    color: black; 
+}
+
+.det_container h1{
+    font-size: 45px;
+    text-transform: capitalize;
+}
+
+.det_container p {
+    font-size: 25px;
+    
+}
+
+.det_button{
+    width :10em;
+}
+

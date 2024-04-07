@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { BACKEND_URL } from '../App';
 import BaseLayout  from './BaseLayout';
+
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
-
+  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+  console.log(BACKEND_URL)
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/products');
+        const response = await axios.get(`${BACKEND_URL}/api/products`);
+        // const response = await axios.get('http://localhost:5000/api/products');
         setProducts(response.data);
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -20,35 +24,31 @@ const HomePage = () => {
 
   return (
     <BaseLayout>
-      <div className="container-fluid" style={{ paddingTop: '10em', border: 'solid', minHeight: '610px', backgroundImage: `url(${require('../assets/images/banner-bg.jpg')})`, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <div style={{ textAlign: 'center'}}>
-            <h1 style={{ textAlign: 'center', marginBottom: '1em' }}>Revolutionalise the way of patent transaction</h1>
-            <p style={{ textAlign: 'center' }}></p>
-            <a href="#" className="btn btn-success" style={{ borderRadius:'20px', width: '10em', }}> Sign Up </a>
-        </div>
-    </div>
+        <div style={{ textAlign: 'center' , display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
 
-        <div>
-        <h1  style={{ color: 'blue', fontSize: '24px' }}>Welcome to Our Store</h1>
-        <p>Explore our wide range of products and find great deals!</p>
-        <div className="row">
-          {products.map((product) => (
-            <div className="col-md-4" key={product._id}>
-              <div className="card">
-              <img src={product.image} alt={product.name} className="card-img-top" style={{ width: '20%'}} /> {/* Image */}
-                <div className="card-body"  style={{ color: 'black' }}>
-                <a href={`ProductDetails/${product._id}`}>
-                  <h3 style={{ color: 'black' }}>{product.name}</h3>
-                </a>
-                <p style={{ color: 'black' }}>{product._id}</p>
-                  <p style={{ color: 'black' }}>{product.description}</p>
-                  <p style={{ color: 'black' }}>Price: ${product.price}</p>
-                </div>
+          {isAuthenticated ? (
+              <div style={{maxWidth:'1050px'}}>
+                <h1 style={{ textAlign: 'left', marginBottom: '1em', textTransform:'uppercase'}}> <strong>Revolutionalise</strong> the way <br />  of <strong>patent</strong> transactions</h1>
+                <p style={{ textAlign: 'center' }}></p>
+                <p style={{ textAlign: 'left', fontSize: '20px' }}>We reimagines the traditional patent marketplace, offering a dynamic and user-friendly environment where inventors, entrepreneurs, and businesses can easily sell, buy and bid patents. we revolutionizes the way patents are bought and sold, fostering a global community of innovators, entrepreneurs, and businesses eager to unlock the full potential of intellectual property.</p>
+                <a href="/products" className="btn btn-outline-dark" style={{ borderRadius:'20px', width: '10em', color: 'white' }}> Explore </a>
               </div>
-            </div>
-          ))}
+            ) : (
+              <>
+                <h1 style={{ textAlign: 'center', marginBottom: '1em' }}>Revolutionalise the way of patent transaction</h1>
+                <p style={{ textAlign: 'center' }}></p>
+                
+                <a href="/login" className="btn btn-success" style={{ borderRadius:'20px', width:'10em' }}> Sign In  </a>
+              </>
+          )}
+
+
+
+
+            
         </div>
-      </div>
+
+        
       </BaseLayout>
   );
 };
