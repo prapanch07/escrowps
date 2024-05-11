@@ -1,15 +1,15 @@
 const User = require('../models/user');
 const registerUser = async (req, res) => {
     try {
-        const { username, email, password, fullname } = req.body;
-        console.log(req.body)
+        const { username, email, password, fullname, isAdmin } = req.body;
+        console.log('req.body: ', req.body)
         const existingUser = await User.findOne({ username });
         if (existingUser) {
             console.log('existing')
             return res.status(400).json({ message: 'Username already exists' });
         }
         console.log('No user')
-        const newUser = new User({ username, email, password, fullname });
+        const newUser = new User({ username, email, password, fullname, isAdmin });
         console.log(newUser)
         await newUser.save();
         res.status(201).json({ message: 'User registered successfully' });
@@ -31,10 +31,11 @@ const loginUser = async (req, res) => {
             console.log('Invalid');
             return res.status(401).json({ message: 'Invalid username or password' });
         }
-
-        // const token = jwt.sign({ userId:user._id }, 'your-secret-key', { expiresIn: '1d'});
-        // console.log(token)
-        return res.status(200).json({ message: 'Login Successful',  username: user.username, user_id: user._id, isSeller: user.isSeller });
+        if (user.deleted){
+            return res.status(403).json({ message: 'This account is already deleted.  ' });
+        }
+        
+        return res.status(200).json({ message: 'Login Successful',  username: user.username, user_id: user._id, isSeller: user.isSeller, isAdmin: user.isAdmin, subscriber: user.subscriber });
     } catch (error) {
         console.error('Error in user loging in :', error);
         res.status(500).json({ message: 'Internal server error' });
@@ -78,4 +79,20 @@ const makeUserSeller = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
-module.exports = { registerUser, loginUser, logoutUser, getUsers, makeUserSeller  };
+
+
+const getuserdetails = async (req, res) => {
+    const {userId} = req.params;
+    console.log("userId inusecontroller: ",userId);
+    try {
+        const user = await User.findById(userId)
+        console.log(user);
+        res.status(200).json(user);
+    } catch (error) {
+        console.error('Error fetchimg user');
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+module.exports = { registerUser, loginUser, logoutUser, getUsers, makeUserSeller, getuserdetails };
+

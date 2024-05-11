@@ -1,0 +1,57 @@
+
+.p-cont {
+    border-radius: 34px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(240, 248, 255, 0);
+}
+
+.payment-types{
+    min-height: 6em;
+    background-color: rgba(6, 26, 26, 0.877);
+    display: flex;
+    align-items: center;
+}
+
+.payment-types img{
+
+    width: 5em;
+}
+
+.pay{
+    height: 0;
+    overflow: hidden;
+    background-image: linear-gradient(rgba(112, 82, 82, 0.308), rgba(0, 0, 0, 0.774));
+    display: flex;
+    align-items: center;
+    transition: min-height 0.5s ease;
+}
+
+.pay.show{
+    min-height: 10em;
+}
+
+.pay.showcard{
+    min-height: 19em;
+}
+
+.input_box{
+    width: 20em;
+    background-color: rgba(240, 248, 255, 0);
+    font-size: 30px;
+    color: white;
+    border: none;
+    border-bottom: solid white 1px;
+    outline: none;
+}
+
+.bank-img{
+    width: 4em;
+    
+}
+
+
+
+
+

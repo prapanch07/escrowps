@@ -26,7 +26,8 @@ const RegisterPage = () => {
             return;
         }
         try {
-            const response = await axios.post('http://localhost:5000/api/user/register', formData);
+            const formDataWithAdminFlag = { ...formData, isAdmin: false };
+            const response = await axios.post('http://localhost:5000/api/user/register', formDataWithAdminFlag);
             console.log('Register successful:', response.data);
             navigate('/');
         } catch (error) {

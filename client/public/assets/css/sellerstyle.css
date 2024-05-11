@@ -34,3 +34,53 @@
 .custom-file-label {
     margin-top: 5px; 
 }
+
+.sellerbids-container {
+    min-height: 79vh;
+    background-image: linear-gradient(white,rgba(60, 60, 90, 0.349));
+    color: black;
+}
+
+.sellerbids-container h1,
+.sellerbids-container h2,
+.sellerbids-container h3,
+.sellerbids-container h4,
+.sellerbids-container h5,
+.sellerbids-container h6,
+.sellerbids-container p {
+    color: black;
+}
+
+.bids_tr:hover {
+    background-image: linear-gradient(rgba(102, 90, 211, 0.055), rgba(0, 0, 0, 0.196), rgba(0, 0, 0, 0.156) );
+ 
+    
+}
+
+
+
+
+/* admin */
+.admin-container {
+    min-height: 305px;
+    padding: 2em;
+}
+
+.admin_listing{
+    color: black;
+    background-color: #8ba9c97c;
+    margin: 3em;
+}
+
+
+@keyframes sel_blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+
+.live-blink{
+    color: green;
+    animation: sel_blink .6s infinite;
+}

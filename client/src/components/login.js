@@ -4,12 +4,12 @@ import BaseLayout from './BaseLayout';
 import { useNavigate } from "react-router-dom";
 
 const Loginpage = () => {
+    localStorage.setItem('page_now', 'login'); 
     const [formData, setFormData] = useState({
         username: '',
         password: ''
     });
     const [error, setError] = useState(null);
-    // const [loginSuccess, setLoginSuccess] = useState(null); 
     const navigate = useNavigate(); 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,8 +25,11 @@ const Loginpage = () => {
             localStorage.setItem('username', response.data.username);
             localStorage.setItem('user_id', response.data.user_id);
             localStorage.setItem('isSeller', response.data.isSeller);
+            localStorage.setItem('isAdmin', response.data.isAdmin);
+            localStorage.setItem('subscriber', response.data.subscriber);
             console.log('Username:', localStorage.getItem('username'));
             console.log('User ID:', localStorage.getItem('user_id'));
+            console.log('Admin status:', localStorage.getItem('isAdmin'));
             navigate('/');
         } catch (error) {
             console.error('Error during login:', error);

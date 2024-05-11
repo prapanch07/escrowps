@@ -12,6 +12,9 @@ const userSchema = new mongoose.Schema({
     fullname:{
         type: String, required:true
     },
+    subscriber:{
+        type: Boolean, default: false
+    },
     isAdmin: {
         type: Boolean,
         default: false 
@@ -20,6 +23,10 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false 
     
+    },
+    deleted: {
+        type: Boolean,
+        default: false
     }
 });
 

@@ -10,7 +10,12 @@ console.log('Static folder path:', staticFolderPath);
 app.use(express.static(staticFolderPath));
 
 const productRoutes = require('./routes/products');
-const userRoutes = require('./routes/users')
+const userRoutes = require('./routes/users');
+const bidsRoutes = require('./routes/bidsroute');
+const cartRoutes = require('./routes/cartroute');
+const chatRoutes = require('./routes/chatroute');
+const paymentroutes = require('./routes/paymentroute');
+const adminroutes = require('./routes/adminroute');
 
 // Middleware
 app.use(cors());
@@ -33,6 +38,11 @@ const upload = multer({ storage: storage });
 // app.use('/api/products', productRoutes);
 app.use('/api/products', upload.single('image'), productRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/bids', bidsRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/chat', chatRoutes);
+app.use('/api/payment', paymentroutes);
+app.use('/api/admin', adminroutes);
 
 // Define routes
 app.get('/', (req, res) => {

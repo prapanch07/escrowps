@@ -1,18 +1,13 @@
 const Product = require('../models/product');
 const User = require('../models/user');
+const BidRoom = require('../models/bidRoommodel');
+const Bid = require('../models/bidsmodel')
 const path = require('path');
 const fs = require('fs');
 exports.createproduct = async(req, res, next) =>{
     try{
-        console.log("Request Body:", req.body);
         const { name, price, description, ownerName, userId } = req.body;
-        console.log('name:', name)
-        console.log('price:', price)
-        console.log('description:', description)
-        console.log('ownerName:', ownerName)
-        console.log('userId: ', userId)
         const image = req.file;
-        console.log(image)
         if (!image || !image.path ) { 
             return res.status(400).json({ error: 'Image is required' });
         }
@@ -25,14 +20,10 @@ exports.createproduct = async(req, res, next) =>{
         const filePath = path.join(uploadsDirectory, imageName);
         const fileContent = fs.readFileSync(image.path);
         fs.writeFileSync(filePath, fileContent);
-
-        
         const user = await User.findById(userId);
         if (!user) {
-            console.log('User not found')
             return res.status(404).json({ error: 'User not found' });
         }
-
         const product = new Product({
             name, 
             price, 
@@ -41,7 +32,6 @@ exports.createproduct = async(req, res, next) =>{
             image:imageName ,
             seller: userId
         });
-        console.log(product)
         const saveProduct = await product.save();
         res.status(201).json(saveProduct);
     } catch (error){
@@ -52,20 +42,32 @@ exports.createproduct = async(req, res, next) =>{
 
 exports.getAllProducts = async(req, res, next) => {
     try{
-        const products = await Product.find();
-        // console.log("All product:", products);
+        const products = await Product.find({deleted:false});
+
         res.json(products);
     }catch (error){
         next(error);
     }
 };
 
+exports.getBidProducts = async(req, res, next) => {
+    try{
+        console.log('getBidProducts: ')
+        const products = await Product.find({allow_bids:true});
+        console.log('products :',products)
+        res.json(products);
+    } catch(error){
+        next("Error Fetching bid products",error);
+    }
+};
+
 
 exports.getProductById = async(req, res, next) => {
     try {
+        
         const productId = req.params.productId;
+        console.log('getProductById:', productId )
         const product = await Product.findById(productId).populate('seller', 'fullname');
-        console.log(product)
         if (!product) {
             return res.status(404).json({
                 message: 'Product not found'
@@ -73,7 +75,7 @@ exports.getProductById = async(req, res, next) => {
         }
         res.json(product);
     } catch(error) {
-        next(error);
+        next("Error in fetching product",error);
     }
 };
 
@@ -81,7 +83,6 @@ exports.getProductById = async(req, res, next) => {
 exports.updateProductById = async (req, res, next) =>{
     try {
         const productId = req.params.productId;
-        console.log("Product Id:", productId);
         const { name, price, description, image, quantity_left, brand } = req.body;
         const updateProduct = await Product.findByIdAndUpdate(productId, {
             name, price, description, image, quantity_left, brand
@@ -101,12 +102,62 @@ exports.updateProductById = async (req, res, next) =>{
 exports.deleteProductById = async (req, res, next) => {
     try {
         const productId = req.params.productId;
-        const deletedProduct = await Product.findByIdAndDelete(productId);
-        if (!deletedProduct) {
-            return res.status(404).json({ message: 'Product not found' });
-        }
+        const product = await Product.findById(productId);
+        product.deleted=true;
+        product.allow_bids=false;
+        product.save();
+        
+
+        console.log('product deleting', product.name);
+        console.log(product);
         res.json({ message: 'Product deleted successfully' });
     } catch (error) {
         next(error);
     }
 };
+
+exports.getProductsByuser = async (req, res, next) => {
+    
+    try {
+        const userId = req.params.userId;
+        const products = await Product.find({seller: userId, deleted:false}).exec();
+        res.json(products)
+    } catch(error) {
+        next(error);
+    }
+};
+
+exports.closebidding=async(req, res,next)=>{
+    try{
+        const productId = req.params.productId
+        console.log(productId)
+        const product = await Product.findById(productId);
+        product.allow_bids=false
+        product.save()
+
+        const bidrooms = await BidRoom.find({product:productId});
+        for (const bidroom of bidrooms){
+            bidroom.open=false
+            bidroom.closed=true
+            bidroom.save()
+            console.log('bidroom._id',bidroom._id)
+            const bids = await Bid.find({
+                bidRoom:bidroom._id, status:'pending'
+            });
+            bids.sort((a, b) => b.amount - a.amount);
+            if (bids.length > 0) {
+                const highestBid = bids[0]; 
+                await Bid.updateMany(
+                    { _id: { $in: bids.map(bid => bid._id) } }, 
+                    { $set: { status: 'rejected' } } 
+                );
+                await Bid.findByIdAndUpdate(highestBid._id, { $set: { status: 'accepted' } });
+        }
+        
+            
+    }res.json({ message: 'Bidding closed' });
+        
+    }catch(error){
+        console.error('Error closing bid', error)
+    }
+}

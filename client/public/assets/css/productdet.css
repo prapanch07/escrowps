@@ -28,3 +28,44 @@
     width :10em;
 }
 
+.show-bid-form {
+    max-height: 500px;
+    transition: max-height 0.5s ease-in-out;
+}
+
+.hide-bid-form {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
+}
+
+.new_det_container{
+    background-color: rgba(0, 0, 0, 0.719);
+    margin: 1em;
+    margin-top: 0;
+    
+    color: rgb(255, 255, 255);
+    min-height: 550px;
+    box-shadow: 0px 0px 10px rgba(71, 21, 21, 0.986);
+}
+
+.bg_img { 
+    width: auto;
+    height: 400px;
+    text-align: center;
+    font-family: 'Caveat Brush', cursive;
+    
+}
+
+.bg_img h1,
+.bg_img p {
+    color: black;
+}
+
+
+.new_det_container h1,
+.new_det_container h2,
+.new_det_container h3,
+.new_det_container p {
+    color: rgb(255, 255, 255); 
+}

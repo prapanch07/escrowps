@@ -38,11 +38,23 @@ const productSchema = new mongoose.Schema({
         type: Boolean,
         default: false 
     },
+
+    allow_bids: {
+        type: Boolean,
+        default: false
+    },
+
+    deleted: {
+        type: Boolean,
+        default: false
+    }
 });
 
 productSchema.pre('save', function(next) {
     this.updatedAt = new Date();
     next();
 });
+
+
 
 module.exports = mongoose.model('Product', productSchema);

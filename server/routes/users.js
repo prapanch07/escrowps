@@ -8,5 +8,6 @@ router.post('/register', userController.registerUser);
 router.post('/login', userController.loginUser);
 router.post('/logout', userController.logoutUser);
 router.put('/become_seller/:userId', userController.makeUserSeller)
+router.get('/:userId', userController.getuserdetails);
 
 module.exports = router;

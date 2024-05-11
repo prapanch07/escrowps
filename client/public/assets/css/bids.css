@@ -1,0 +1,111 @@
+.bids_card {
+    height: 6em;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.055), rgba(42, 42, 172, 0.925), rgba(255, 255, 255, 0.11));
+    display: flex;
+    align-items: center;
+    transition: background-image 0.4s ease-in-out;
+}
+
+.bids_card:hover {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.055), rgba(42, 42, 172, 0.925), rgba(2, 2, 24, 0.63));
+}
+
+.cart_div {
+    background-color: rgba(240, 248, 255, 0.192);
+    margin-top: 2em;
+    width: 90%;
+}
+
+.cart_table td {
+   border: 0; 
+   vertical-align: middle;
+}
+
+.cart_tr {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.068), black);
+}
+
+.cart_tr:hover {
+    background-image: linear-gradient(rgba(12, 1, 1, 0.39), black);
+}
+
+.bid-table{
+    width: 100%;
+}
+
+.bid-table,
+.bid-table th,
+.bid-table td {
+  border: none;
+}
+
+/* Group 66 */
+
+.empty-bid{
+    width: 95%;
+    height: 132px;
+    margin-top: 1em;
+    border: solid white 1px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    cursor: pointer;
+    background-color: rgba(240, 255, 255, 0.13);
+}
+
+.live_bid_img_container {
+    display: flex; /* Use flexbox */
+    flex-wrap: nowrap; /* Prevent wrapping */
+    overflow-x: auto; /* Enable horizontal scrolling if needed */
+    max-width: 40em; /* Adjust as needed */
+}
+
+.live_bid_img {
+    height: 14em;
+    width: 15em;
+    border: solid 1px;
+    border-radius: 5px;
+    margin-right: 10px; /* Add spacing between images */
+}
+
+
+
+.live_bid_img_container {
+    scrollbar-color: #cccccc transparent;
+    scrollbar-width: thin;
+}
+
+.live_bid_img_container::-webkit-scrollbar {
+    width: 8px; 
+}
+
+
+.overlay {
+    position: absolute;
+    left: ;
+    top: 10%;
+    width: 100%;
+    padding: 10px;
+    height: 12em;
+    display: flex; /* Use flexbox to align items */
+    flex-direction: column; /* Stack items vertically */
+    justify-content:
+}
+
+.heading {
+    margin-top: 50%; /* adjust as needed for vertical centering */
+    transform: translateY(-50%);
+}
+
+.patent-text {
+    margin-top: auto; /* push to the bottom */
+}
+
+
+.pur_card{
+    
+}
+.pur_card.h6{
+    color: #000;
+}
