@@ -10,17 +10,18 @@ const SellerDashboard = () => {
   const [products, setProducts] = useState([]);
   const [unsoldproducts, setUnsoldproducts] = useState([]);
   const [soldproducts, setSoldproducts] = useState([]);
-  
+
   const [formData, setFormData] = useState({
     name: '',
     ownerName: '',
     price: '',
     image: null,
-    description: ''
+    descripton: '',
+    patentno: ''
   });
   const [descriptionError, setDescriptionError] = useState('');
   const [showPurCard, setShowPurCard] = useState(false);
-  const [sel_product, setSel_product]=useState();
+  const [sel_product, setSel_product] = useState();
   const [upcomingBidDays, setUpcomingBidDays] = useState([])
   const [bidday, setBidday] = useState('');
   const [openingBid, setOpeningBid] = useState('');
@@ -30,25 +31,25 @@ const SellerDashboard = () => {
   const navigate = useNavigate();
 
 
-  const fetchProducts = async() => {
+  const fetchProducts = async () => {
     try {
-        const response = await axios.get(`${BACKEND_URL}/api/products/user/${user_id}`);
-        setProducts(response.data);
-        console.log('products',response.data)
-        const unsoldproducts = response.data.filter(product => !product.isSold);
-        const soldproducts = response.data.filter(product => product.isSold);
-        console.log('Unsold products:', unsoldproducts);
-        console.log('sold products:', soldproducts);
-        setUnsoldproducts(unsoldproducts);
-        setSoldproducts(soldproducts);
+      const response = await axios.get(`${BACKEND_URL}/api/products/user/${user_id}`);
+      setProducts(response.data);
+      console.log('products', response.data)
+      const unsoldproducts = response.data.filter(product => !product.isSold);
+      const soldproducts = response.data.filter(product => product.isSold);
+      console.log('Unsold products:', unsoldproducts);
+      console.log('sold products:', soldproducts);
+      setUnsoldproducts(unsoldproducts);
+      setSoldproducts(soldproducts);
     } catch (error) {
-        
-        console.error("Error Fetching Products:", error);
-        
+
+      console.error("Error Fetching Products:", error);
+
     }
   };
   useEffect(() => {
-    
+
     fetchProducts();
   }, []);
 
@@ -93,6 +94,7 @@ const SellerDashboard = () => {
       formDataToSend.append('image', formData.image);
       formDataToSend.append('description', formData.description);
       formDataToSend.append('userId', localStorage.getItem('user_id'));
+      formDataToSend.append('patentNo', formData.patentno)
       const response = await axios.post(`${BACKEND_URL}/api/products`, formDataToSend);
       console.log('Product added successfully:', response.data);
 
@@ -101,7 +103,8 @@ const SellerDashboard = () => {
         ownerName: '',
         price: '',
         image: null,
-        description: ''
+        description: '', 
+        patentno: ''
       });
     } catch (error) {
       // Handle error
@@ -114,7 +117,7 @@ const SellerDashboard = () => {
   }
 
   const createBidRoom = async (productId) => {
-    try{
+    try {
       navigate('/seller_dashboard');
       const response = await axios.get(`${BACKEND_URL}/api/bids/BidDays`);
       setBidday(response.data.day)
@@ -122,8 +125,8 @@ const SellerDashboard = () => {
       const s_product = products.find(product => product._id === productId);
       setSel_product(s_product)
       setShowPurCard(true);
-      
-    } catch (error){
+
+    } catch (error) {
       console.error("Error Creating bid room", error);
     }
   }
@@ -134,12 +137,12 @@ const SellerDashboard = () => {
     const parsedDate = new Date(selectedBiddingDate);
     parsedDate.setDate(parsedDate.getDate() - 1);
     const type = 'bidbooking_seller';
-    const amount= 100;
+    const amount = 100;
     const note = 'Make the payment to book bid';
     const productid = sel_product._id;
-    
+
     console.log('Bidding date:', parsedDate);
-    navigate('/payment', { state: { amount,  type,  note, openingBid, parsedDate, productid } });
+    navigate('/payment', { state: { amount, type, note, openingBid, parsedDate, productid } });
   };
 
 
@@ -148,35 +151,35 @@ const SellerDashboard = () => {
       const confirmed = window.confirm("Are you sure you want to delete this product?");
       if (!confirmed) return;
       await axios.delete(`${BACKEND_URL}/api/products/${productId}`);
-      
+
       setProducts(products.filter(product => product._id !== productId));
     } catch (error) {
       console.error("Error deleting product:", error);
     }
   };
 
-  const closeBidding=async(productId)=>{
-    try{
+  const closeBidding = async (productId) => {
+    try {
       const confirmed = window.confirm("Are you sure you want to clsose bidding this product?");
       if (!confirmed) return;
       await axios.put(`${BACKEND_URL}/api/products/closebidding/${productId}`);
       console.log('bidding closed')
       window.location.reload();
-    }catch(error){
+    } catch (error) {
       console.error('Error closing bid', error)
     }
   }
 
-  const closePurCard=async()=>{
+  const closePurCard = async () => {
     setShowPurCard(false);
   }
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); 
+    const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
-    return `${day-1}-${month}-${year}`;
+    return `${day - 1}-${month}-${year}`;
   };
   const handleOpeningBidChange = (event) => {
     setOpeningBid(event.target.value);
@@ -188,95 +191,95 @@ const SellerDashboard = () => {
   };
   const validateBids = (openingBid, reenteredBid) => {
     if (openingBid === reenteredBid) {
-        setDisableContinue(false);
+      setDisableContinue(false);
     } else {
-        setDisableContinue(true);
+      setDisableContinue(true);
     }
   };
-  
+
 
 
   console.log(sel_product)
-  console.log('bidday',bidday)
-  console.log('upcomingBidDays',upcomingBidDays)
+  console.log('bidday', bidday)
+  console.log('upcomingBidDays', upcomingBidDays)
 
   return (
     <SellerBase>
       {showPurCard && (
-            <div className="popup-container ">
-                <div className="popup-content text-center">
-                    <div className="row pur_card" style={{width:'70em'}}>
-                        <div className="col-3 " style={{borderBottom:'solid 1px'}}>
-                            <img src={`${BACKEND_URL}/${sel_product.image}`} style={{width:'12em', height:'10em'}}></img>
-                        </div>
-                        <div className="col-9 py-1" style={{borderBottom:'solid 1px',  borderRight:'solid 1px', textAlign:'left'}}>
-                            <h6 style={{color:'black', marginTop:'2em'}}>Patent Name : {sel_product.name}</h6>
-                            <h6 style={{color:'black', marginTop:'1em'}}>Patented to: {sel_product.ownerName}</h6>
-                            
-                            <h6 style={{color:'black', marginTop:'1em'}}>Patented date: {formatDate(sel_product.updatedAt)}</h6>
-                        </div>
-                        <div className="col-12 mt-2 p-2" style={{borderBottom:'solid 1px', borderRight:'solid 1px'}}>
-                            <div className='row' >
-                                <p className='col-3' >Bidding date</p>
-                                <select
-                                  style={{ border: 0, borderBottom: 'solid 1px ', height: '2em', width: '40em' }}
-                                  onChange={(e) => setSelectedBiddingDate(e.target.value)}
-                                  value={selectedBiddingDate}
-                              >
-                                <option>--------------</option>
-                                  {upcomingBidDays.map((bidDay, index) => {
-                                      const parsedDate = new Date(bidDay);
-                                      return <option key={index} value={parsedDate}>{formatDate(parsedDate)}</option>;
-                                  })}
-                              </select>
-                            </div>
-                            <div className='row' >
-                                <p className='col-3' >Opening bid</p>
-                                <input 
-                                    type='text' 
-                                    value={openingBid}
-                                    onChange={handleOpeningBidChange}
-                                    style={{border:0, borderBottom:'solid 1px ', height:'2em', width:'40em'}}
-                                ></input>
-                            </div>
-                            <div className='row'>
-                                <p className='col-3'>Re enter Opening bid</p>
-                                <input 
-                                    type='text' 
-                                    value={reenteredBid}
-                                    onChange={handleReenteredBidChange}
-                                    style={{border:0, borderBottom:'solid 1px ', height:'2em', width:'40em'}}
-                                ></input>
-                            </div>
-                        </div>
-                        <div className="col-12 mt-2 p-2" style={{borderBottom:'solid 1px', borderRight:'solid 1px'}}>
-                            <div className='col-12' style={{textAlign:'left'}}>
-                                <h6 style={{color:'black', marginLeft:'2em'}}>Price Details</h6>
-                            </div>
-                            <div className='row' >
-                                <p className='col-3'>Price</p>
-                                <p className='col-5'></p>
-                                <p className='col-3'>100</p>
-                            </div>
-                            <div className='row'>
-                               
-                                <p className='col-3'>Total Amount</p>
-                                <p className='col-5'></p>
-                                <p className='col-3'>100</p>
-                            </div>
-                        </div>
-                        
-                        
-                    </div>
-                    <div style={{ marginTop: '1em', display: 'flex', justifyContent: 'flex-end' }}>
-                        <button disabled={disableContinue}  className='btn btn-success btn-sm mx-auto' onClick={continueBidopen}>Continue</button>
-                        <button onClick={closePurCard} className='btn btn-danger btn-sm'>Close</button>
-                    </div>
+        <div className="popup-container ">
+          <div className="popup-content text-center">
+            <div className="row pur_card" style={{ width: '70em' }}>
+              <div className="col-3 " style={{ borderBottom: 'solid 1px' }}>
+                <img src={`${BACKEND_URL}/${sel_product.image}`} style={{ width: '12em', height: '10em' }}></img>
+              </div>
+              <div className="col-9 py-1" style={{ borderBottom: 'solid 1px', borderRight: 'solid 1px', textAlign: 'left' }}>
+                <h6 style={{ color: 'black', marginTop: '2em' }}>Patent Name : {sel_product.name}</h6>
+                <h6 style={{ color: 'black', marginTop: '1em' }}>Patented to: {sel_product.ownerName}</h6>
 
+                <h6 style={{ color: 'black', marginTop: '1em' }}>Patented date: {formatDate(sel_product.updatedAt)}</h6>
+              </div>
+              <div className="col-12 mt-2 p-2" style={{ borderBottom: 'solid 1px', borderRight: 'solid 1px' }}>
+                <div className='row' >
+                  <p className='col-3' >Bidding date</p>
+                  <select
+                    style={{ border: 0, borderBottom: 'solid 1px ', height: '2em', width: '40em' }}
+                    onChange={(e) => setSelectedBiddingDate(e.target.value)}
+                    value={selectedBiddingDate}
+                  >
+                    <option>--------------</option>
+                    {upcomingBidDays.map((bidDay, index) => {
+                      const parsedDate = new Date(bidDay);
+                      return <option key={index} value={parsedDate}>{formatDate(parsedDate)}</option>;
+                    })}
+                  </select>
                 </div>
-                
-            </div>  
-            )}
+                <div className='row' >
+                  <p className='col-3' >Opening bid</p>
+                  <input
+                    type='text'
+                    value={openingBid}
+                    onChange={handleOpeningBidChange}
+                    style={{ border: 0, borderBottom: 'solid 1px ', height: '2em', width: '40em' }}
+                  ></input>
+                </div>
+                <div className='row'>
+                  <p className='col-3'>Re enter Opening bid</p>
+                  <input
+                    type='text'
+                    value={reenteredBid}
+                    onChange={handleReenteredBidChange}
+                    style={{ border: 0, borderBottom: 'solid 1px ', height: '2em', width: '40em' }}
+                  ></input>
+                </div>
+              </div>
+              <div className="col-12 mt-2 p-2" style={{ borderBottom: 'solid 1px', borderRight: 'solid 1px' }}>
+                <div className='col-12' style={{ textAlign: 'left' }}>
+                  <h6 style={{ color: 'black', marginLeft: '2em' }}>Price Details</h6>
+                </div>
+                <div className='row' >
+                  <p className='col-3'>Price</p>
+                  <p className='col-5'></p>
+                  <p className='col-3'>100</p>
+                </div>
+                <div className='row'>
+
+                  <p className='col-3'>Total Amount</p>
+                  <p className='col-5'></p>
+                  <p className='col-3'>100</p>
+                </div>
+              </div>
+
+
+            </div>
+            <div style={{ marginTop: '1em', display: 'flex', justifyContent: 'flex-end' }}>
+              <button disabled={disableContinue} className='btn btn-success btn-sm mx-auto' onClick={continueBidopen}>Continue</button>
+              <button onClick={closePurCard} className='btn btn-danger btn-sm'>Close</button>
+            </div>
+
+          </div>
+
+        </div>
+      )}
 
 
       <section style={{ backgroundColor: 'rgb(238, 214, 214)', marginTop: '0px' }} id='addproduct'>
@@ -307,6 +310,19 @@ const SellerDashboard = () => {
                     required
                   />
                 </div>
+                {/*  */}
+                <div className='col-12 my-2'>
+                  <input
+                    type="number"
+                    name="patentno"
+                    placeholder='Patent No'
+                    className='form-control'
+                    value={formData.patentno}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                {/*  */}
                 <div className='col-12 my-2'>
                   <input
                     type='number'
@@ -320,7 +336,7 @@ const SellerDashboard = () => {
                 </div>
                 <div className='col-12 row my-2'>
                   <div className='col-6'>
-                    <label htmlFor="image" className="custom-file-label ml-3" style={{ display: showPurCard ? 'none' : 'block'}}>Image</label>
+                    <label htmlFor="image" className="custom-file-label ml-3" style={{ display: showPurCard ? 'none' : 'block' }}>Image</label>
                     <input
                       type='file'
                       id='image'
@@ -379,105 +395,105 @@ const SellerDashboard = () => {
                 <tr key={index}>
                   <td>{index + 1}</td>
                   {/* Replace placeholders with actual product data */}
-                  <td><img src={`${BACKEND_URL}/${product.image}`} alt="product" style={{width: '5em', borderRadius:'4px'}} /></td>
+                  <td><img src={`${BACKEND_URL}/${product.image}`} alt="product" style={{ width: '5em', borderRadius: '4px' }} /></td>
                   <td>{product.name}</td>
                   <td>{product.ownerName}</td>
                   <td>{product.price}</td>
-                  <td style={{maxWidth:'10em'}}>{product.description.slice(0,50)}</td>
+                  <td style={{ maxWidth: '10em' }}>{product.description.slice(0, 50)}</td>
                   <td>
-                     {product.allow_bids ? 
-                     (
-                       <div className='text-center'>
-                        <h6 className='live-blink'>Live now</h6>
-                        <a 
-                        className='btn btn-outline-danger btn-sm'
-                        style={{fontWeight:'bolder', border:'0', fontSize:'small'}}
-                        onClick={() => closeBidding(product._id)}
-                        >
-                          
-                          Close Bidding
-                        </a>
+                    {product.allow_bids ?
+                      (
+                        <div className='text-center'>
+                          <h6 className='live-blink'>Live now</h6>
+                          <a
+                            className='btn btn-outline-danger btn-sm'
+                            style={{ fontWeight: 'bolder', border: '0', fontSize: 'small' }}
+                            onClick={() => closeBidding(product._id)}
+                          >
 
-                       </div>
-                     ) : (
-                      <button 
-                        href='/sellerbids'
-                        className='btn btn-outline-primary btn-sm ' 
-                        style={{fontWeight:'bold', border:'0', fontSize:'small'}}
-                        onClick={() => createBidRoom (product._id)}
+                            Close Bidding
+                          </a>
+
+                        </div>
+                      ) : (
+                        <button
+                          href='/sellerbids'
+                          className='btn btn-outline-primary btn-sm '
+                          style={{ fontWeight: 'bold', border: '0', fontSize: 'small' }}
+                          onClick={() => createBidRoom(product._id)}
                         >
                           Open for Bids
-                      </button>
-                     )}
-                   
+                        </button>
+                      )}
+
                   </td>
                   <td>
-                    <button 
-                        href='/sellerbids'
-                        className='btn btn-outline-secondary btn-sm ' 
-                        style={{fontWeight:'bold', border:'0', fontSize:'small'}}
-                        onClick={() => seeBids (product._id)}
-                        >
-                          View Bids
-                      </button>
-                    </td>
-                  <td className='row' style={{maxWidth:'6em'}}>
-                    <a className='col-6 btn btn-outline-primary btn-sm' style={{border:'0'}}>✏️ </a>
-                    <a onClick={() => delete_product(product._id)} className='col-6  btn btn-outline-danger btn-sm' style={{border:'0'}}>🗑️ </a>
+                    <button
+                      href='/sellerbids'
+                      className='btn btn-outline-secondary btn-sm '
+                      style={{ fontWeight: 'bold', border: '0', fontSize: 'small' }}
+                      onClick={() => seeBids(product._id)}
+                    >
+                      View Bids
+                    </button>
+                  </td>
+                  <td className='row' style={{ maxWidth: '6em' }}>
+                    <a className='col-6 btn btn-outline-primary btn-sm' style={{ border: '0' }}>✏️ </a>
+                    <a onClick={() => delete_product(product._id)} className='col-6  btn btn-outline-danger btn-sm' style={{ border: '0' }}>🗑️ </a>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-   
 
 
-          {soldproducts.length>0 &&   
-          <>
-            <h5 className='text-dark mt-5' style={{borderTop:'solid 1px'}}>solded Patents </h5>
-            <table className='table table-border mt-4' >
-              <thead>
-                <tr>
-                  <th>SiNo</th>
-                  <th></th>
-                  <th>Product Name</th>
-                  <th>Owner Name</th>
-                  <th>Price</th>
-                  <th>Description</th>
-                  <th >Bids</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {/* Here you can map through the products state to display each product */}
-                {soldproducts.map((product, index) => (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    {/* Replace placeholders with actual product data */}
-                    <td><img src={`${BACKEND_URL}/${product.image}`} alt="product" style={{width: '5em', borderRadius:'4px'}} /></td>
-                    <td>{product.name}</td>
-                    <td>{product.ownerName}</td>
-                    <td>{product.price}</td>
-                    <td style={{maxWidth:'10em'}}>{product.description.slice(0,50)}</td>
-                    
-                    <td>
-                      <button 
+
+          {soldproducts.length > 0 &&
+            <>
+              <h5 className='text-dark mt-5' style={{ borderTop: 'solid 1px' }}>solded Patents </h5>
+              <table className='table table-border mt-4' >
+                <thead>
+                  <tr>
+                    <th>SiNo</th>
+                    <th></th>
+                    <th>Product Name</th>
+                    <th>Owner Name</th>
+                    <th>Price</th>
+                    <th>Description</th>
+                    <th >Bids</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {/* Here you can map through the products state to display each product */}
+                  {soldproducts.map((product, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      {/* Replace placeholders with actual product data */}
+                      <td><img src={`${BACKEND_URL}/${product.image}`} alt="product" style={{ width: '5em', borderRadius: '4px' }} /></td>
+                      <td>{product.name}</td>
+                      <td>{product.ownerName}</td>
+                      <td>{product.price}</td>
+                      <td style={{ maxWidth: '10em' }}>{product.description.slice(0, 50)}</td>
+
+                      <td>
+                        <button
                           href='/sellerbids'
-                          className='btn btn-outline-secondary btn-sm ' 
-                          style={{fontWeight:'bold', border:'0', fontSize:'small'}}
-                          onClick={() => seeBids (product._id)}
-                          >
-                            View Bids
+                          className='btn btn-outline-secondary btn-sm '
+                          style={{ fontWeight: 'bold', border: '0', fontSize: 'small' }}
+                          onClick={() => seeBids(product._id)}
+                        >
+                          View Bids
                         </button>
                       </td>
-                    <td className='row' style={{maxWidth:'6em'}}>
-                      {/* <a className='col-6 btn btn-outline-primary btn-sm' style={{border:'0'}}>✏️ </a> */}
-                      <a onClick={() => delete_product(product._id)} className='col-6  btn btn-outline-danger btn-sm' style={{border:'0'}}>🗑️ </a>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                      <td className='row' style={{ maxWidth: '6em' }}>
+                        {/* <a className='col-6 btn btn-outline-primary btn-sm' style={{border:'0'}}>✏️ </a> */}
+                        <a onClick={() => delete_product(product._id)} className='col-6  btn btn-outline-danger btn-sm' style={{ border: '0' }}>🗑️ </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </>
           }
         </div>
